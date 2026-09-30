@@ -1,12 +1,12 @@
 import axios from "axios";
 
-
 // ==========================================
 // BACKEND URL
 // ==========================================
 
-const API_BASE_URL = "http://127.0.0.1:8000";
-
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://127.0.0.1:8000";
 
 // ==========================================
 // AXIOS INSTANCE
@@ -18,7 +18,6 @@ const api = axios.create({
     Accept: "application/json",
   },
 });
-
 
 // ==========================================
 // TYPES
@@ -40,7 +39,6 @@ export interface AnalysisResult {
   recommended_action: string;
 }
 
-
 export interface Recommendation {
   title: string;
   category: string;
@@ -52,15 +50,11 @@ export interface Recommendation {
   steps: string[];
 }
 
-
 export interface RecommendationResult {
   best_option: Recommendation;
-
   recommendations: Recommendation[];
-
   circular_priority: string[];
 }
-
 
 export interface UploadResponse {
   status: string;
@@ -77,7 +71,6 @@ export interface UploadResponse {
   recommendations: RecommendationResult;
 }
 
-
 // ==========================================
 // UPLOAD IMAGE
 // ==========================================
@@ -85,14 +78,9 @@ export interface UploadResponse {
 export const uploadImage = async (
   file: File
 ): Promise<UploadResponse> => {
-
   const formData = new FormData();
 
-  formData.append(
-    "file",
-    file
-  );
-
+  formData.append("file", file);
 
   const response = await api.post<UploadResponse>(
     "/api/analysis/upload",
@@ -104,23 +92,17 @@ export const uploadImage = async (
     }
   );
 
-
   return response.data;
 };
-
 
 // ==========================================
 // HEALTH CHECK
 // ==========================================
 
 export const checkBackendHealth = async () => {
-
-  const response = await api.get(
-    "/api/health"
-  );
+  const response = await api.get("/api/health");
 
   return response.data;
 };
-
 
 export default api;
